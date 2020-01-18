@@ -20,7 +20,10 @@
       <button class="btn btn-dark" (click)="toggleDisplay()">Display
         Detail</button>
       <p *ngIf="display">Yo, you have no idea what you are missing!</p>
-      <p *ngFor="let item of clickLog">{{item.time}} {{item.display}}</p>
+      <p *ngFor="let item of clickLog"
+        [ngStyle]="{backgroundColor: setColor(item)}"
+        [ngClass]="{'white-text': item.idx >5 && item.idx % 2 ? true: false}">
+        {{item.time}} {{item.display}}</p>
     </div>
   </div>
 </div>
