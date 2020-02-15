@@ -1,35 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from "@angular/core";
+import { PostsService } from "./posts.service";
+import { NgForm } from "@angular/forms";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
   loadedPosts = [];
+  isFetching = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private postsManager: PostsService) {
+    this.onFetchPosts();
+  }
 
   ngOnInit() {}
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(form: NgForm) {
     // Send Http request
-    this.http
-      .post(
-        'https://ng-complete-guide-c56d3.firebaseio.com/posts.json',
-        postData
-      )
+    this.postsManager
+      .createPost(form.value.title, form.value.content)
       .subscribe(responseData => {
-        console.log(responseData);
+        this.onFetchPosts();
+        form.resetForm();
       });
   }
 
   onFetchPosts() {
     // Send Http request
+    this.isFetching = true;
+
+    this.postsManager.retchPosts().subscribe(posts => {
+      this.loadedPosts = posts;
+      this.isFetching = false;
+    });
   }
 
   onClearPosts() {
-    // Send Http request
+    this.postsManager.clearPosts().subscribe(res => {
+      this.onFetchPosts();
+    });
   }
 }
