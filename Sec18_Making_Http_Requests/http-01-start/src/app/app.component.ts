@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     // Send Http request
     this.isFetching = true;
 
-    this.postsManager.retchPosts().subscribe(posts => {
+    this.postsManager.fretchPosts().subscribe(posts => {
       this.loadedPosts = posts;
       this.isFetching = false;
     });

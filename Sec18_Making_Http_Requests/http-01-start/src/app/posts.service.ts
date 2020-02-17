@@ -22,7 +22,7 @@ export class PostsService {
     );
   }
 
-  retchPosts() {
+  fretchPosts() {
     // Send Http request
     let searchParams = new HttpParams();
     searchParams = searchParams

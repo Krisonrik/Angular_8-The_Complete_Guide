@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { RecipeService } from "../recipes/recipe.service";
 import { Recipe } from "../recipes/recipe.model";
 
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class DataStorageService {
@@ -32,10 +32,10 @@ export class DataStorageService {
               ingredients: res.ingredients ? res.ingredients : []
             };
           });
+        }),
+        tap(res => {
+          this.recipeManager.setRecipes(res);
         })
-      )
-      .subscribe(res => {
-        this.recipeManager.setRecipes(res);
-      });
+      );
   }
 }
