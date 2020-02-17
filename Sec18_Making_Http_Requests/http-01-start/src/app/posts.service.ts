@@ -15,6 +15,9 @@ export class PostsService {
       {
         title: title,
         content: content
+      },
+      {
+        observe: "response"
       }
     );
   }

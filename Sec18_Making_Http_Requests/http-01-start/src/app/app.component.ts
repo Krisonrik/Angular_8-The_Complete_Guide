@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
     this.postsManager
       .createPost(form.value.title, form.value.content)
       .subscribe(responseData => {
+        console.log(responseData);
+
         this.onFetchPosts();
         form.resetForm();
       });
