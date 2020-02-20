@@ -12,4 +12,7 @@ export class User {
     }
     return this._token;
   }
+  get valid() {
+    return new Date() < this._tokenExpirationDate;
+  }
 }

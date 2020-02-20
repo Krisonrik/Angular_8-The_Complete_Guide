@@ -2,9 +2,11 @@ import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
   HttpRequest,
-  HttpHandler
+  HttpHandler,
+  HttpParams
 } from "@angular/common/http";
 import { AuthService } from "./auth.service";
+import { take, exhaustMap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +15,22 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return next.handle(req);
+    return this.auth.user.pipe(
+      take(1),
+      exhaustMap(user => {
+        if (!user) {
+          return next.handle(req);
+        }
+        console.log(user);
+        console.log(user.token);
+
+        let modifiedReq = req.clone({
+          params: new HttpParams().set("auth", user.token)
+        });
+        console.log(modifiedReq);
+
+        return next.handle(modifiedReq);
+      })
+    );
   }
 }
